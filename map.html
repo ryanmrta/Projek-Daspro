@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/static/mikost.jpeg" type="image/jpeg"/>
+    <title>Lokasi {{ kost.name }} - MIKOST</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #FCEFCB 0%, #FAD59A 100%);
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="gradient-bg shadow-lg">
+        <nav class="container mx-auto px-4 py-4">
+            <div class="flex justify-between items-center">
+                <div class="text-black text-2xl font-bold">
+                    <a href="/index" class="flex items-center">
+                        <i class="fas fa-home mr-2"></i>MIKOST
+                    </a>
+                </div>
+                <div class="flex space-x-4">
+                    <a href="/" class="text-black hover:text-red-900 transition duration-300 flex items-center">
+                        <i class="fas fa-arrow-left mr-2"></i>Kembali
+                    </a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Map Section -->
+    <main class="container mx-auto px-4 py-8">
+        <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+            <!-- Kost Info Header -->
+            <div class="p-6 border-b">
+                <div class="flex items-start space-x-4">
+                    <img src="/static/{{ kost.images[0] }}" class="w-24 h-24 object-cover rounded-lg" onerror="this.src='/static/placeholder.svg?height=96&width=96'">
+                    <div class="flex-1">
+                        <h1 class="text-2xl font-bold text-gray-800 mb-2">{{ kost.name }}</h1>
+                        <p class="text-gray-600 mb-2 flex items-center">
+                            <i class="fas fa-map-marker-alt mr-2 text-red-500"></i>
+                            {{ kost.address }}
+                        </p>
+                        <div class="flex items-center space-x-4">
+                            <span class="text-2xl font-bold text-green-600">{{ kost.price }}</span>
+                            <span class="px-3 py-1 rounded-full text-sm font-semibold
+                                {% if kost.type == 'Khusus Cowo' %}bg-blue-100 text-blue-800
+                                {% elif kost.type == 'Khusus Cewe' %}bg-pink-100 text-pink-800
+                                {% else %}bg-green-100 text-green-800{% endif %}">
+                                {{ kost.type }}
+                            </span>
+                            <a href="tel:${kost.kontak}" class="text-green-600 font-bold hover:text-green-700 transition duration-300 flex items-center">
+                                <i class="fab fa-whatsapp mr-2 text-xl"></i>
+                                {{kost.kontak}}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Map -->
+            <div class="p-6">
+                <h2 class="text-xl font-bold text-gray-800 mb-4">Lokasi di Peta</h2>
+                
+                <!-- Simple Map using OpenStreetMap -->
+                <div class="bg-gray-200 rounded-lg overflow-hidden" style="height: 400px;">
+                    <iframe 
+                        width="100%" 
+                        height="400" 
+                        frameborder="0" 
+                        scrolling="no" 
+                        marginheight="0" 
+                        marginwidth="0" 
+                        src="https://www.openstreetmap.org/export/embed.html?bbox={{ kost.lng - 0.01 }},{{ kost.lat - 0.01 }},{{ kost.lng + 0.01 }},{{ kost.lat + 0.01 }}&layer=mapnik&marker={{ kost.lat }},{{ kost.lng }}"
+                        style="border: 0">
+                    </iframe>
+                </div>
+                
+                <!-- Map Links -->
+                <div class="mt-4 flex flex-wrap gap-3">
+                    <a href="https://www.google.com/maps?q={{ kost.lat }},{{ kost.lng }}" 
+                       target="_blank" 
+                       class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-300 flex items-center">
+                        <i class="fab fa-google mr-2"></i>
+                        Buka di Google Maps
+                    </a>
+                    
+                    <a href="https://maps.apple.com/?q={{ kost.lat }},{{ kost.lng }}" 
+                       target="_blank" 
+                       class="bg-gray-800 text-white px-4 py-2 rounded-lg hover:bg-gray-900 transition duration-300 flex items-center">
+                        <i class="fas fa-map mr-2"></i>
+                        Buka di Apple Maps
+                    </a>
+                </div>
+            </div>
+
+            <!-- Facilities -->
+            <div class="p-6 border-t">
+                <h3 class="text-lg font-bold text-gray-800 mb-3">Fasilitas</h3>
+                <div class="flex flex-wrap gap-2">
+                    {% for facility in kost.facilities %}
+                    <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">
+                        {{ facility }}
+                    </span>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8 mt-16">
+        <div class="container mx-auto px-4 text-center">
+            <div class="text-2xl font-bold mb-4">
+                <i class="fas fa-home mr-2"></i>MIKOST
+            </div>
+            <p class="mb-4">Platform terpercaya untuk mencari kost impianmu</p>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/static/mikost.jpeg" type="image/jpeg"/>
+    <title>MIKOST - Platform Kost Terpercaya</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .image-slider {
+            scroll-behavior: smooth;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #FCEFCB 0%, #FAD59A 100%);
+        }
+        .pagination-btn {
+            transition: all 0.3s ease;
+        }
+        .pagination-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+        .search-results {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .search-container {
+        background-image: url(/static/latarbaru2.jpg);
+        background-size: cover;
+        background-position: center;
+        position: relative;
+        z-index: 1;
+        }
+        #searchDropdown {
+        position: absolute;
+        width: 100%;
+        z-index: 10;
+        }
+        .search-results-wrapper {
+        position: relative;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="gradient-bg shadow-lg sticky top-0 z-50">
+        <nav class="container mx-auto px-4 py-4">
+            <div class="flex justify-between items-center">
+                <div class="text-black text-2xl font-bold">
+                    <a href="/" class="flex items-center">
+                        <i class="fas fa-home mr-2"></i>MIKOST
+                    </a>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="/" class="text-red-900 flex items-center">
+                        <i class="fas fa-home mr-2"></i>Beranda
+                    </a>
+                    <a href="/tentangkami" class="text-black hover:text-red-900 transition duration-300 flex items-center">
+                        <i class="fas fa-users mr-2"></i>Tentang Kami
+                    </a>
+                </div>
+                <div class="md:hidden">
+                    <button id="mobile-menu-btn" class="text-black">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="hidden md:hidden mt-4 pb-4">
+                <a href="/tentangkami" class="block text-black hover:text-red-900 py-2">
+                    <i class="fas fa-users mr-2"></i>Tentang Kami
+                </a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="search-container py-16">
+        <div class="container mx-auto px-4">
+            <h1 class="text-4xl font-bold text-white text-center mb-8">Temukan Kost Impianmu</h1>
+            <p class="text-xl text-white text-center mb-8 opacity-90">Platform terpercaya untuk mencari kost terbaik di Indonesia</p>
+        
+            <!-- Search Bar -->
+            <div class="max-w-2xl mx-auto search-results-wrapper">
+                <div class="bg-white rounded-2xl shadow-2xl p-4">
+                    <div class="relative">
+                        <input 
+                            type="text" 
+                            id="searchInput"
+                            placeholder="Cari berdasarkan nama kost atau alamat..."
+                            class="w-full px-6 py-4 text-lg border-2 border-gray-300 rounded-xl focus:border-red-800 focus:outline-none pl-14"
+                        >
+                        <i class="fas fa-search absolute left-5 top-1/2 transform -translate-y-1/2 text-gray-400 text-xl"></i>
+                        <button onclick="searchKost()" class="absolute right-3 top-1/2 transform -translate-y-1/2 bg-gradient-to-r from-amber-700 to-stone-800 text-white px-6 py-2 rounded-lg hover:from-stone-800 hover:to-amber-700 transition duration-300">
+                            Cari
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Search Results Dropdown -->
+                <div id="searchDropdown" class="hidden bg-white rounded-xl shadow-2xl mt-2">
+                    <div class="p-4">
+                        <div id="searchResultsHeader" class="mb-4">
+                            <p id="searchResultText" class="text-gray-600 font-semibold"></p>
+                        </div>
+                        <div id="searchResultsList" class="search-results space-y-3">
+                            <!-- Search results will be populated here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Rekomendasi Kost Section -->
+    <main class="container mx-auto px-4 py-12">
+        <div class="text-center mb-12">
+            <h2 class="text-4xl font-bold text-gray-800 mb-4">REKOMENDASI KOST</h2>
+            <div class="w-24 h-1 bg-gradient-to-r from-purple-500 to-blue-500 mx-auto rounded-full"></div>
+            <p class="text-gray-600 mt-4">Menampilkan 3 kost terpopuler dari total 10+ pilihan tersedia</p>
+        </div>
+
+        <!-- Kost Cards Grid -->
+        <div id="kostGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Cards will be loaded dynamically -->
+        </div>
+
+        <!-- Pagination Section -->
+        <div class="mt-16 flex justify-center items-center space-x-4">
+            <div class="flex space-x-2">
+                <div class="bg-red-800 text-white w-12 h-12 rounded-lg flex items-center justify-center font-bold">1</div>
+                <a href="/page2" class="pagination-btn bg-white border border-gray-300 text-gray-700 w-12 h-12 rounded-lg hover:bg-red-800 hover:text-white transition duration-300 flex items-center justify-center">2</a>
+            </div>
+            
+            <a href="/page2" class="pagination-btn bg-red-800 text-white px-6 py-3 rounded-lg flex items-center">
+                Halaman Selanjutnya<i class="fas fa-chevron-right ml-2"></i>
+            </a>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8 mt-16">
+        <div class="container mx-auto px-4 text-center">
+            <div class="text-2xl font-bold mb-4">
+                <i class="fas fa-home mr-2"></i>MIKOST
+            </div>
+            <p class="mb-4">Platform terpercaya untuk mencari kost impianmu</p>
+            <div class="flex justify-center space-x-6">
+                <a href="/tentangkami" class="hover:text-amber-700 transition duration-300">Tentang Kami</a>
+                <a href="/" class="text-amber-700">Beranda</a>
+            </div>
+            <div class="mt-6 text-sm text-gray-400">
+                © 2025 MIKOST. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        let allKostData = [];
+        let currentSearchResults = [];
+
+        // Load initial data
+        async function loadKostData() {
+            try {
+                const response = await fetch('/api/kost?page=1');
+                const data = await response.json();
+                allKostData = data.results;
+                displayKostCards(allKostData);
+            } catch (error) {
+                console.error('Error loading kost data:', error);
+            }
+        }
+
+        // Display kost cards
+        function displayKostCards(kostData) {
+            const kostGrid = document.getElementById('kostGrid');
+            kostGrid.innerHTML = '';
+
+            kostData.forEach((kost, index) => {
+                const facilityTags = kost.facilities.map(facility => 
+                    `<span class="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs">
+                        <i class="fas fa-${getFacilityIcon(facility)} mr-1"></i>${facility}
+                    </span>`
+                ).join('');
+
+                const typeColor = kost.type === 'Khusus Cowo' ? 'bg-blue-500' : 
+                                 kost.type === 'Khusus Cewe' ? 'bg-pink-500' : 'bg-green-500';
+                const typeIcon = kost.type === 'Khusus Cowo' ? 'fas fa-mars' : 
+                                kost.type === 'Khusus Cewe' ? 'fas fa-venus' : 'fas fa-venus-mars';
+
+                const cardHtml = `
+                    <div class="kost-card bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition duration-300">
+                        <div class="relative">
+                            <div class="image-slider flex overflow-x-auto" id="slider${index}">
+                                ${kost.images.map(img => `<img src="/static/${img}" class="w-full h-48 object-cover flex-shrink-0" onerror="this.src='/static/placeholder.svg?height=200&width=400'">`).join('')}
+                            </div>
+                            <div class="absolute top-4 right-4 ${typeColor} text-white px-3 py-1 rounded-full text-sm font-semibold">
+                                <i class="${typeIcon} mr-1"></i>${kost.type}
+                            </div>
+                            <div class="absolute bottom-4 left-4 right-4 flex justify-between">
+                                <button onclick="scrollSlider('slider${index}', -1)" class="bg-black bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-70">
+                                    <i class="fas fa-chevron-left"></i>
+                                </button>
+                                <button onclick="scrollSlider('slider${index}', 1)" class="bg-black bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-70">
+                                    <i class="fas fa-chevron-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <div class="flex justify-between items-start mb-3">
+                                <h3 class="text-xl font-bold text-gray-800">${kost.name}</h3>
+                                <span class="text-2xl font-bold text-green-600">${kost.price}</span>
+                            </div>
+                            <a href="/map/${encodeURIComponent(kost.name)}" class="text-gray-600 mb-3 flex item-center hover:text-red-600 transition duration-300">
+                                <i class="fas fa-map-marker-alt mr-2 text-red-500 mt-1 flex-shrink-0"></i>
+                                <span class="address-truncate">${kost.address.length > 80 ? 
+                                kost.address.substring(0, 80) + '...' : kost.address}
+                                </span>
+                            </a>
+                            <div class="mb-4">
+                                <h4 class="font-semibold text-gray-700 mb-2">Fasilitas:</h4>
+                                <div class="flex flex-wrap gap-2">
+                                    ${facilityTags}
+                                </div>
+                            </div>
+                            <div class="mb-4 p-3 bg-gray-50 rounded-lg">
+                                <a href="tel:${kost.kontak}" class="text-green-600 font-bold hover:text-green-700 transition duration-300 flex items-center">
+                                    <i class="fab fa-whatsapp mr-2 text-xl"></i>
+                                    ${kost.kontak}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                kostGrid.innerHTML += cardHtml;
+            });
+        }
+
+        // Search functionality
+        async function searchKost() {
+            const searchInput = document.getElementById('searchInput');
+            const searchTerm = searchInput.value.trim();
+            
+            if (searchTerm === '') {
+                hideSearchDropdown();
+                return;
+            }
+            
+            try {
+                const response = await fetch(`/api/search?q=${encodeURIComponent(searchTerm)}`);
+                const data = await response.json();
+                
+                currentSearchResults = data.results;
+                displaySearchResults(data);
+            } catch (error) {
+                console.error('Error searching:', error);
+            }
+        }
+
+        // Display search results in dropdown
+        function displaySearchResults(data) {
+            const dropdown = document.getElementById('searchDropdown');
+            const resultText = document.getElementById('searchResultText');
+            const resultsList = document.getElementById('searchResultsList');
+            
+            if (data.count === 0) {
+                resultText.textContent = `Tidak ditemukan kost dengan kata kunci "${data.query}"`;
+                resultText.className = 'text-red-500 font-semibold';
+                resultsList.innerHTML = '';
+            } else {
+                resultText.textContent = `Ditemukan ${data.count} kost dengan kata kunci "${data.query}"`;
+                resultText.className = 'text-green-600 font-semibold';
+                
+                resultsList.innerHTML = data.results.map(kost => `
+                    <div class="border rounded-lg p-3 hover:bg-gray-50 cursor-pointer" onclick="selectKost('${kost.name}')">
+                        <div class="flex justify-between items-start">
+                            <div class="flex-1">
+                                <h4 class="font-semibold text-gray-800">${kost.name}</h4>
+                                <<a href="/map/${encodeURIComponent(kost.name)}" class="text-sm text-gray-600 mt-1 hover:text-red-600 flex items-center">
+                                    <i class="fas fa-map-marker-alt mr-1 text-red-500"></i>
+                                    ${kost.address}
+                                </a>
+                                <div class="flex items-center mt-2">
+                                    <span class="text-lg font-bold text-green-600 mr-3">${kost.price}</span>
+                                    <span class="text-xs px-2 py-1 rounded-full ${kost.type === 'Khusus Cowo' ? 'bg-blue-100 text-blue-800' : kost.type === 'Khusus Cewe' ? 'bg-pink-100 text-pink-800' : 'bg-green-100 text-green-800'}">${kost.type}</span>
+                                </div>
+                            </div>
+                            <span class="text-xs text-gray-500 ml-2">Hal. ${kost.page}</span>
+                        </div>
+                    </div>
+                `).join('');
+            }
+            
+            dropdown.classList.remove('hidden');
+        }
+
+        // Hide search dropdown
+        function hideSearchDropdown() {
+            document.getElementById('searchDropdown').classList.add('hidden');
+        }
+
+        // Select kost from search results
+        function selectKost(kostName) {
+            const selectedKost = currentSearchResults.find(kost => kost.name === kostName);
+            if (selectedKost) {
+                displayKostCards([selectedKost]);
+                hideSearchDropdown();
+                document.getElementById('searchInput').value = kostName;
+            }
+        }
+
+        // Get facility icon
+        function getFacilityIcon(facility) {
+            const iconMap = {
+                'WiFi': 'wifi',
+                'AC': 'snowflake',
+                'Parkir': 'car',
+                'Kamar Mandi Dalam': 'bath',
+                'Security 24 Jam': 'shield-alt',
+                'Security': 'shield-alt',
+                'Dapur Bersama': 'utensils',
+                'Dapur': 'utensils',
+                'Kipas Angin': 'fan',
+                'Ruang Gaming': 'gamepad',
+                'Taman': 'leaf',
+                'Spa': 'spa',
+                'Valet Parking': 'car',
+                'Shuttle': 'shuttle-van',
+                'Lapangan': 'basketball-ball',
+                'Smart TV': 'tv',
+                'Parkir Mobil': 'car',
+                'Parkir Motor': 'motorcycle'
+            };
+            return iconMap[facility] || 'check';
+        }
+
+        // Image slider function
+        function scrollSlider(sliderId, direction) {
+            const slider = document.getElementById(sliderId);
+            const scrollAmount = slider.clientWidth;
+            slider.scrollLeft += direction * scrollAmount;
+        }
+
+        // Mobile menu toggle
+        document.getElementById('mobile-menu-btn').addEventListener('click', function() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Real-time search as user types
+        document.getElementById('searchInput').addEventListener('input', function() {
+            if (this.value.trim() === '') {
+                hideSearchDropdown();
+                loadKostData(); // Reload original data
+            } else {
+                searchKost();
+            }
+        });
+
+        // Search on Enter key press
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchKost();
+            }
+        });
+
+        // Hide dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            const searchContainer = e.target.closest('.max-w-2xl');
+            if (!searchContainer) {
+                hideSearchDropdown();
+            }
+        });
+
+        // Load data when page loads
+        window.addEventListener('load', loadKostData);
+    </script>
+</body>
+</html>
